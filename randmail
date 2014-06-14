@@ -95,22 +95,23 @@ def handle_messages(box, known_mail):
             known_mail[i] = known_mail[m_id]
             stdscr.addstr(EMAIL_LINE.format_map(locals()))
 
-        c = stdscr.getkey()
         try:
-            if c.isdigit():
-                m = known_mail.get(int(c), None)
-                if not m: continue
-                with suspend_curses():
-                    call_editor(m.text)
+            c = stdscr.getkey()
         except:
-            pass
+            continue
 
+        if c.isdigit():
+            m = known_mail.get(int(c), None)
+            if not m: continue
+            with suspend_curses():
+                call_editor(m.text)
 
 def main(win):
     global stdscr
     stdscr = win
     box = Boxer.random_box()
     known_mail = {}
+    stdscr.timeout(5000)
 
     handle_messages(box, known_mail)
 
